@@ -4,12 +4,12 @@ const userSchema = new mongoose.Schema({
     firstname : {
         type : String ,
         required : true,
-        unique : true
+        unique : false
     },
     lastname :{
         type : String,
         required : true,
-        unique : true
+        unique : false
     },
     email :{
         type : String,
@@ -19,13 +19,15 @@ const userSchema = new mongoose.Schema({
     password : {
         type : String ,
         required : true,
-        unique : true  
+        
+    },
+    avatar : {
+        type : String,
+        default : `https://i.stack.imgur.com/34AD2.jpg`
     }
     
-},{
-    timestamps : true
 })
 
 const User = mongoose.model('User' , userSchema)
+export default User
 
-export default User;

@@ -14,10 +14,10 @@ function Header() {
                     <input type='text' placeholder='Search...' className='bg-transparent focus:outline-none w-24 sm:w-64'></input>
                     <FaSearch className='text-slate-600'/>
                 </form>
-                <ul className='flex  gap-4'>
-                    <li className='hidden sm:inline text-slate-700 hover:underline'><Link to={"/sign-in"}/>Home</li>
-                    <li className='hidden sm:inline text-slate-700 hover:underline'><Link to={"/about"}/>About</li>
-                    <li className=' text-slate-700 hover:underline'><Link to={"/sign-up"}/>Sign Up</li>
+                <ul className='flex  gap-4 cursor-pointer'>
+                    <Link to={"/"}><li className='hidden sm:inline text-slate-700 hover:underline'>Home</li></Link>
+                    <Link to={"/about"}><li className='hidden sm:inline text-slate-700 hover:underline'>About</li></Link>
+                    <Link to={"/sign-up"}><li className='text-slate-700 hover:underline'>Sign Up</li></Link>
                 </ul>
             </div>
 

@@ -5,10 +5,17 @@ import About from './pages/About'
 import Signup from './pages/Signup'
 import SignIn from './pages/SignIn'
 import Header from './component/Header'
+import {Toaster} from 'react-hot-toast'
+// import rootReducer from './reducers'
+// import { configureStore } from '@reduxjs/toolkit'
+// import { Provider } from 'react'
 function App() {
+  // const store = configureStore({
+  //   reducer : rootReducer
+  // })
   return(
-    
-    <BrowserRouter>
+      
+      <BrowserRouter>
       <Header/>
       <Routes>
         <Route path='/' element={<Home/>}/>
@@ -17,7 +24,9 @@ function App() {
         <Route path='/sign-up' element={<Signup/>}/>
         <Route path='/profile' element={<Profile/>}/>
       </Routes>
+      <Toaster/>
     </BrowserRouter>
+    
   )
 }
 

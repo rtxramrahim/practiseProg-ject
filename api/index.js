@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import mongoose  from 'mongoose'
 import userRoutes from './Routes/userRoutes.js'
+import cors  from 'cors'
 dotenv.config()
 const app = express()
 
@@ -10,6 +11,13 @@ app.use(express.json())
 app.listen(PORT,()=>{
     console.log(`App is up and running at port ${PORT}`)
 })
+
+app.use(
+	cors({
+		origin:"http://localhost:3000",
+		credentials:true,
+	})
+)
 
 mongoose.connect(process.env.DATABASE_URL).then(()=>{
     console.log("Database connected succesfully!!")
@@ -22,17 +30,17 @@ app.get("/" , (req,res)=>{
     res.send("app is up and running")
 })
 
-app.use("/api/user" , userRoutes )
+app.use("/api/auth" , userRoutes )
 
 // middleware to handle errors
-app.use((err , req, res , next)=>{
-    const statusCode = err.statusCode || 500
-    const message = err.message || 'Internal Server Error!!'
+// app.use((err , req, res , next)=>{
+//     const statusCode = err.statusCode || 500
+//     const message = err.message || 'Internal Server Error!!'
 
-    return res.status(statusCode).json({
-        success : false,
-        statusCode,
-        message
-    })
+//     return res.status(statusCode).json({
+//         success : false,
+//         statusCode,
+//         message
+//     })
 
-})
+// })
