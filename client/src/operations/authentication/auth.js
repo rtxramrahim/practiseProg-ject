@@ -5,8 +5,8 @@ export const signup = async(data)=>{
      
     try{
       const response = await apiConnector('POST' , AUTH.signup , {
-            firstname : data.firstname,
-            lastname : data.lastname,
+            username : data.username,
+            
             email : data.email,
             password : data.password
         })

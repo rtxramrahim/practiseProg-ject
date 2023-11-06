@@ -14,7 +14,7 @@ function Oauth() {
       const auth = getAuth(app)
       
       const result = await signInWithPopup(auth, provider)
-
+      console.log(result)
       const data = {
         displayName : result.user.displayName,
         email : result.user.email,
@@ -25,7 +25,7 @@ function Oauth() {
       if(response.data.success == true){
         // console.log(response.data.user)
         dispatch(signInSuccess(response.data.user))
-        navigate("/")
+        navigate("/profile")
       }else{
         dispatch(signInFailure(response))
       }

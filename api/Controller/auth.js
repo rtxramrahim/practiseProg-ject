@@ -5,9 +5,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 export const signup = async(req,res)=>{
     try{
-        const { firstname , lastname , email , password } = req.body
+        const { username , email , password } = req.body
         
-        if(!firstname || !lastname || !email || !password){
+        if(!username  || !email || !password){
             return res.json({
                 success : false,
                 message : "All  fields are required"
@@ -29,7 +29,7 @@ export const signup = async(req,res)=>{
             })
         }
         const newUser = await User.create({
-            firstname  , lastname , email , password : hashedPassword
+            username , email , password : hashedPassword
         })
         if(!newUser){
             return res.status(401).json({
@@ -39,7 +39,8 @@ export const signup = async(req,res)=>{
         }
         return res.status(200).json({
            success : true,
-            message : "user created successfully"
+            message : "user created successfully",
+            user : newUser
         })
         
     }catch(err){
@@ -78,9 +79,9 @@ export const signin = async(req,res)=>{
         }else{
             const payLoad = {
                 _id : validUser._id ,
-                firstname : validUser.firstname,
-                lastname : validUser.lastname,
-                email : validUser.email
+                username : validUser.username,
+                email : validUser.email,
+                avatar : validUser.avatar
             }
 
             const options = {
@@ -117,9 +118,9 @@ export const googleSignIn = async(req,res)=>{
         if(existUser){
             const payLoad = {
                 _id : existUser._id ,
-                firstname : existUser.firstname,
-                lastname : existUser.lastname,
-                email : existUser.email
+                username : existUser.username,
+                email : existUser.email,
+                avatar : existUser.avatar
             }
 
             const options = {
@@ -139,12 +140,21 @@ export const googleSignIn = async(req,res)=>{
         else{
             const generatePassword = Math.random().toString(36).slice(-8)
             const password = await bcrypt.hash(generatePassword , 10)
-            const userName = displayName.split(" ")
-            const firstname = userName[0]
-            const lastname = userName[1]
-            console.log(password , firstname , lastname)
+            // let firstname, lastname 
+            // if(displayName.includes(" ")){
+            //     const newName = displayName.split(" ")
+            //     firstname = newName[0]
+            //     lastname= newName[1]
+            // }
+            // else{
+            //     firstname = displayName +  Math.random().toString(36).slice(-8)
+            //     lastname = " "
+            // }
+             
+            
+            // console.log(password , firstname , lastname)
 
-            const newUser = await User.create({firstname , lastname , email , password , avatar : photoUrl})
+            const newUser = await User.create({username : displayName , email , password , avatar : photoUrl})
             if(!newUser){
                 return res.json({
                     success : false,
@@ -154,8 +164,7 @@ export const googleSignIn = async(req,res)=>{
 
             const payLoad = {
                 _id : newUser._id ,
-                firstname : newUser.firstname,
-                lastname : newUser.lastname,
+                username : newUser.username,
                 email : newUser.email ,
                 avatar : newUser.avatar
             }

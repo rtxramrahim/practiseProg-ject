@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import Oauth from '../component/Oauth.jsx'
 
 function Signup(){
-  const [formdata , setFormdata] = useState({firstname : "" , lastname : "" , email : "" , password : ""})
+  const [formdata , setFormdata] = useState({ username : "", email : "" , password : ""})
   const[loading , setLoading ] = useState(false)
   const [error , setError] = useState(null)
   const[showPassword , setShowPassword] = useState(false)
@@ -36,10 +36,10 @@ function Signup(){
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
       <form onSubmit={submitHandler} className='flex flex-col gap-4'>
-          <div className='flex flex-row gap-2 justify-between'>
-          <input type='text' placeholder='Firstname' className='border p-3 rounded-lg shadow-sm ' onChange={handleChange} value={formdata.firstname} name='firstname'></input>
-          <input type='text' placeholder='Lastname' className='border p-3 rounded-lg  shadow-sm' onChange={handleChange} value={formdata.lastname} name='lastname'></input>
-          </div>
+          
+          <input type='text' placeholder='User Name' className='border p-3 rounded-lg shadow-sm ' onChange={handleChange} value={formdata.username} name='username'></input>
+        
+          
           <input type='email' placeholder='Email' className='border p-3 rounded-lg shadow-sm' onChange={handleChange} value={formdata.email} name='email'></input>
           <input type={showPassword ? 'text' : 'password'} placeholder='Password' className='border p-3 rounded-lg shadow-sm' onChange={handleChange} value={formdata.password} name='password'>
             

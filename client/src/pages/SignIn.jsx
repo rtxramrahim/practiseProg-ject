@@ -30,7 +30,7 @@ function Signin(){
       const user = result.user
       dispatch(signInSuccess())
       dispatch(setUser(user))
-      navigate("/about")
+      navigate("/profile")
     }else{
         dispatch(signInFailure(result))
     }

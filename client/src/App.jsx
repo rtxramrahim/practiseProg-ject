@@ -6,6 +6,7 @@ import Signup from './pages/Signup'
 import SignIn from './pages/SignIn'
 import Header from './component/Header'
 import {Toaster} from 'react-hot-toast'
+import PrivateRoute from './PrivateRoute'
 // import rootReducer from './reducers'
 // import { configureStore } from '@reduxjs/toolkit'
 // import { Provider } from 'react'
@@ -22,7 +23,9 @@ function App() {
         <Route path='/about' element={<About/>}/>
         <Route path='/sign-in' element={<SignIn/>}/>
         <Route path='/sign-up' element={<Signup/>}/>
-        <Route path='/profile' element={<Profile/>}/>
+        <Route element={<PrivateRoute/>}>
+          <Route path='/profile' element={<Profile/>}/>
+        </Route>
       </Routes>
       <Toaster/>
     </BrowserRouter>

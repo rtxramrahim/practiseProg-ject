@@ -1,16 +1,12 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    firstname : {
+    username : {
         type : String ,
         required : true,
         unique : false
     },
-    lastname :{
-        type : String,
-        required : true,
-        unique : false
-    },
+    
     email :{
         type : String,
         required : true,
@@ -23,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     avatar : {
         type : String,
-        default : `https://i.stack.imgur.com/34AD2.jpg`
+        default : "https://i.stack.imgur.com/34AD2.jpg"
     }
     
 })

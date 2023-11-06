@@ -1,7 +1,13 @@
 import React from 'react'
 import {FaSearch} from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { setUser } from '../redux/slices/userSlice'
+import { useDispatch } from 'react-redux'
 function Header() {
+    const {currentUser} = useSelector((state)=>state.user)
+    const dispatch = useDispatch()
+    console.log(currentUser)
   return (
     <header>
         <div className='bg-slate-200 shadow-md'>
@@ -17,8 +23,14 @@ function Header() {
                 <ul className='flex  gap-4 cursor-pointer'>
                     <Link to={"/"}><li className='hidden sm:inline text-slate-700 hover:underline'>Home</li></Link>
                     <Link to={"/about"}><li className='hidden sm:inline text-slate-700 hover:underline'>About</li></Link>
-                    <Link to={"/sign-up"}><li className='text-slate-700 hover:underline'>Sign Up</li></Link>
+                    {
+                        currentUser ? <Link to={"/profile"}> <img className='rounded-full object-cover h-7 w-7' src={currentUser.avatar} alt='profile'/> </Link> : <Link to={"/sign-up"}><li className='text-slate-700 hover:underline'>Sign Up</li></Link>
+                    }
+                    <button onClick={()=>{
+                        dispatch(setUser(null))
+                    }}> log out</button>
                 </ul>
+
             </div>
 
         </div>
