@@ -2,8 +2,9 @@ import React from 'react'
 import {FaSearch} from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { setUser } from '../redux/slices/userSlice'
+import { setUser , signOut} from '../redux/slices/userSlice'
 import { useDispatch } from 'react-redux'
+// import { signOut } from 'firebase/auth'
 function Header() {
     const {currentUser} = useSelector((state)=>state.user)
     const dispatch = useDispatch()
@@ -27,7 +28,7 @@ function Header() {
                         currentUser ? <Link to={"/profile"}> <img className='rounded-full object-cover h-7 w-7' src={currentUser.avatar} alt='profile'/> </Link> : <Link to={"/sign-up"}><li className='text-slate-700 hover:underline'>Sign Up</li></Link>
                     }
                     <button onClick={()=>{
-                        dispatch(setUser(null))
+                        dispatch(signOut())
                     }}> log out</button>
                 </ul>
 

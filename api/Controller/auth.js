@@ -94,7 +94,8 @@ export const signin = async(req,res)=>{
             return res.cookie('jwt_token' ,token , options).json({
                 success : true,
                 message : "Welcome to realEstate bussiness!",
-                user : payLoad
+                user : payLoad ,
+                token : token
             })
 
         }
@@ -133,7 +134,8 @@ export const googleSignIn = async(req,res)=>{
             return res.cookie('jwt_token' ,token , options).json({
                 success : true,
                 message : "Welcome to realEstate bussiness!",
-                user : payLoad
+                user : payLoad , 
+                token : token
             })
 
         }
@@ -171,7 +173,8 @@ export const googleSignIn = async(req,res)=>{
             return res.status(200).json({
                 success : true,
                 message : "Welcome to RealEstate Bussiness!!",
-                user : payLoad
+                user : payLoad , 
+                token : token
             })
         }
 

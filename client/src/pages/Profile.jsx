@@ -80,7 +80,7 @@ function Profile() {
   
 }
   return (
-    <div className='p-3 max-w-lg mx-auto'>
+    <div className='p-3 max-w-lg mx-auto -mt-[20px]'>
       <h1 className='text-3xl font-semibold text-center my-7 '>Profile</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input type='file' onChange={(e)=>setFile(e.target.files[0])} hidden accept='image/*' ref={fileRef}></input>
@@ -102,6 +102,7 @@ function Profile() {
         {
           message && <span className='text-green-700'>{message}</span>
         }
+        <button onClick={()=>navigate('/listing/create')} className='bg-green-700  text-white rounded-lg p-3 uppercase hover:opacity-95'>Create Listing</button>
       </form>
 
       <div className='flex flex-row mt-5 justify-between'>

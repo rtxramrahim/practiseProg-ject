@@ -7,7 +7,7 @@ import {AiOutlineEye} from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import {useDispatch }from 'react-redux'
-import { signInStart , signInFailure , signInSuccess , setUser} from '../redux/slices/userSlice.js'
+import { signInStart , signInFailure , signInSuccess , setUser , setToken} from '../redux/slices/userSlice.js'
 import Oauth from '../component/Oauth.jsx'
 function Signin(){
   const [formdata , setFormdata] = useState({firstname : "" , lastname : "" , email : "" , password : ""})
@@ -30,6 +30,7 @@ function Signin(){
       const user = result.user
       dispatch(signInSuccess())
       dispatch(setUser(user))
+      dispatch(setToken(result.token))
       navigate("/profile")
     }else{
         dispatch(signInFailure(result))

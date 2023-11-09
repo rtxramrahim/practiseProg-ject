@@ -1,7 +1,7 @@
 import React from 'react'
 import {GoogleAuthProvider , getAuth, signInWithPopup} from 'firebase/auth'
 import { app } from '../firebase'
-import { signInSuccess , signInFailure } from '../redux/slices/userSlice'
+import { signInSuccess , signInFailure , setToken} from '../redux/slices/userSlice'
 import { signupOauth } from '../operations/authentication/oauth'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -25,6 +25,7 @@ function Oauth() {
       if(response.data.success == true){
         // console.log(response.data.user)
         dispatch(signInSuccess(response.data.user))
+        dispatch(setToken(response.data.token))
         navigate("/profile")
       }else{
         dispatch(signInFailure(response))

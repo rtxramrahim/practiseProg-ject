@@ -7,5 +7,7 @@ export const AUTH = {
     signinOAuth : "api/auth/signin/outh/google"
 }
 export const profile = {
-    update : '/api/profile/update'
+    update : '/api/profile/update',
+    createListing : '/api/profile/listing/create',
+    updateListing : '/api/profile/listing/update'
 }
