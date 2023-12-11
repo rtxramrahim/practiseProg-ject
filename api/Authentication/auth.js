@@ -4,6 +4,12 @@ dotenv.config()
 export const Auth = (req,res,next)=>{
     try{    
         const jwt_token = req.body.jwt_token || req.cookies.jwt_token || req.header("Authorization").replace("Bearer ","")
+        if(req.cookies.jwt_token){
+            console.log("token fetched from cookies")
+        }
+        if(req.header("Authorization")){
+            console.log("token fetched from cookies")
+        }
         try{
             const decode = jwt.verify(jwt_token , process.env.JWT_SECRET)
             req.user = decode

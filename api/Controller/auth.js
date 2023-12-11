@@ -185,3 +185,27 @@ export const googleSignIn = async(req,res)=>{
         })
     }
 }
+export const findUser = async(req,res)=>{
+    try{
+        const {userRef} = req.body
+        console.log(userRef)
+        const findId = await User.find({_id : userRef})
+        if(!findId){
+            return res.status(401).json({
+                success : false,
+                message : "User not found"
+            })
+        }
+        findId.password = null
+        return res.status(200).json({
+            success : true,
+            message : "user found",
+            user : findId
+        })
+    }catch(err){
+        return res.status(500).json({
+            success : true,
+            message : "Internal Server Error"
+        })
+    }
+}

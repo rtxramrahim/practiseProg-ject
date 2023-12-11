@@ -45,3 +45,15 @@ export const signin = async(data)=>{
     }
    
 }
+export const findUser = async(userRef , token)=>{
+    try{
+        const response = await apiConnector('POST' , AUTH.findUser ,
+            {userRef}, {
+            Authorization : `Bearer ${token}`
+        })
+       
+        return response.data.user
+    }catch(err){
+        console.log(err.message)
+    }
+}

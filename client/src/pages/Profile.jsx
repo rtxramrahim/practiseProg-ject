@@ -8,8 +8,11 @@ import { getDownloadURL, ref } from 'firebase/storage'
 import {getStorage , uploadBytesResumable } from 'firebase/storage'
 import { profileUpdate } from '../operations/profile/profileUpdates'
 import { updateUserSuccess , updateUserStart , updateUserFailure } from '../redux/slices/userSlice'
+import { getAllListings } from '../operations/profile/listing'
+import { Link } from 'react-router-dom'
+import { deleteListing } from '../operations/profile/listing'
 function Profile() {
-  const {currentUser} = useSelector((state)=>state.user)
+  const {currentUser , token} = useSelector((state)=>state.user)
   const dispatch = useDispatch()
   const {error , loading}  = useSelector((state)=>state.user)
   const [message , setMesssage ] = useState(null)
@@ -20,6 +23,7 @@ function Profile() {
   const [fileUploadError , setFileUploadError] = useState(false)
   const fileRef = useRef(null)
   const [filePrec , setFilePerc] = useState(0)
+  
   const handleSignOut = ()=>{
     dispatch(setUser(null))
     navigate("/")
@@ -29,6 +33,8 @@ function Profile() {
       handleChangeFile(file)
     }
   },[file])
+  
+  
   // console.log(filePrec)
   // console.log(formdata)
   const handleChangeFile = (file)=>{
@@ -79,6 +85,7 @@ function Profile() {
   }
   
 }
+  
   return (
     <div className='p-3 max-w-lg mx-auto -mt-[20px]'>
       <h1 className='text-3xl font-semibold text-center my-7 '>Profile</h1>
@@ -107,8 +114,32 @@ function Profile() {
 
       <div className='flex flex-row mt-5 justify-between'>
         <button onClick={()=>alert('This function is currently Disabled')} className='text-red-700 '>Delete Account</button>
-        <button onClick={handleSignOut} className='text-red-700 '>Sign Out</button>
+        <button onClick={()=>handleSignOut()} className='text-red-700 '>Sign Out</button>
       </div>
+      <div onClick={()=>navigate(`/listing/uploaded/${currentUser?._id}`)} className='text-green-700 text-center mt-6 cursor-pointer'> Show Listings</div>
+      {/* <div className='flex flex-col gap-2 mt-4'>
+        { showListing &&  userListings.length > 0 && userListings.map((listings , index)=>{
+          return <div  className='border rounded-lg p-3 justify-between gap-5   items-center flex' key={index}>
+          
+          <Link to={`/listing/${listings._id}`}>
+              <img src={listings.imageUrls[0]} className='h-16 w-16 object-contain' alt='image'></img>
+              <p className='text-slate-700 font-semibold flex-1 hover:underline truncate'>{listings.name}</p>
+             
+          </Link>
+          <div className='flex flex-col gap-2'>
+                  
+                  <button onClick={()=>handleDeleteListing(listings._id)} className='text-red-700'>Delete</button>
+                <Link to={`/listing/update-listing/${listings._id}`}><button  className='text-green-700 '>Edit</button></Link>      
+              </div>
+
+          </div>
+        })}
+      </div> */}
+      {/* <div>
+        {
+          showListing && userListings.length === 0 && <span>No Listings found</span>
+        }
+      </div> */}
     </div>
   )
 }

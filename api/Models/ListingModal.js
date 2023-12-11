@@ -54,6 +54,10 @@ const listingSchema = new mongoose.Schema({
     userRef : {
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User'
+    },
+    createAt : {
+        type : Date,
+        default : Date.now()
     }
     
 })

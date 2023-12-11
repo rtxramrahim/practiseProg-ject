@@ -1,28 +1,34 @@
+import React, { useEffect } from 'react'
 import { getStorage } from 'firebase/storage'
 import { app } from '../firebase'
-import React from 'react'
+
 import { useState } from 'react'
 import { ref } from 'firebase/storage'
 import { uploadBytesResumable } from 'firebase/storage'
 import { getDownloadURL } from 'firebase/storage'
 import {AiFillCloseCircle} from 'react-icons/ai'
-import { createListing } from '../operations/profile/listing'
+import { updateListing } from '../operations/profile/listing'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { setNewListing } from '../redux/slices/listingSlice'
-function CreateListing() {
+import { useParams } from 'react-router-dom'
+import { findListing } from '../operations/profile/listing'
+function UpdateListing() {
     const [files ,setFiles] = useState([])
     const {token} = useSelector((state)=>state.user)
     const navigate = useNavigate()
-    // console.log(token)
-    // const [imageUrls , setImageUrls] = useState([])
+    const listingId = useParams()
+  
     const [formdata , setFormData] = useState({ imageUrls : [] , name : '' , address : '' , description : '' , type : 'Rent' , bedrooms : 1 ,
         bathrooms : 1 , regularPrice : 5000 , discountedPrice : 4500 , furnished : false , parking : false , offer : false} )
     const [uploading , setUploading] = useState(false)
     const [error ,setError] = useState(null)
     const [listing , setListing] = useState(false)
     const dispatch = useDispatch()
- 
+    const handledata = async()=>{
+        const response = await findListing(listingId , token)
+        setFormData(response)
+    }
     const uploadImage =async ()=>{
     
        if(files.length == 0){
@@ -105,25 +111,31 @@ function CreateListing() {
     const handleSubmit = async (e)=>{
 
         e.preventDefault()
-        if( formdata.discountedPrice  > formdata.regularPrice ){
+        if( formdata.offer &&  formdata.discountedPrice  > formdata.regularPrice ){
             alert('discounted price should be less than regular price')
+            return
         }
         if(formdata.imageUrls.length === 0 ){
             setError('Please select atleast one image')
+            return
         }
         else{
             setListing(true)
-            console.log("formdata" , formdata)
-            const response = await createListing(formdata , token)
-            dispatch(setNewListing(response))
+         
+            console.log(formdata)
+            const response = await updateListing(formdata , token)
+            // dispatch(setNewListing(response))
             setListing(false)
             navigate(`/listing/${response._id}`)
        
         }
     }
+    useEffect(()=>{
+        handledata()
+    },[])
   return (
     <div className='p-3 max-w-4xl mx-auto'>
-        <h1 className='text-3xl font-semibold text-center my-7'>Create a Listing</h1>
+        <h1 className='text-3xl font-semibold text-center my-7'>Update Listing</h1>
         <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4'>
             <div className='flex flex-col gap-4 flex-1'>
                 <input type='text' placeholder='Name' onChange={handleChange} value={formdata.name} className='border p-3 rounded-lg ' id='name' maxLength={62} minLength={10} required></input>
@@ -198,14 +210,14 @@ function CreateListing() {
                 }
             </div>
             {
-            formdata.imageUrls.length > 0 && formdata.imageUrls.map((image)=>{
+            formdata.imageUrls?.length > 0 && formdata.imageUrls.map((image)=>{
                return <div  key={image} className='flex flex-row justify-between items-center'>
                     <img  src={image} alt='listing img' className='w-20 h-20 object-contain rounded-lg '></img>
                     <button type='button' onClick={()=>handleRemovePicture(image)} className='text-red-700 uppercase hover:opacity-95'>Delete</button>
                </div>
             })
            }
-            <button disabled={uploading || listing} type='submit' className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>{`${listing ? "Creating..." : "Create Listing"}`}</button>
+            <button disabled={uploading || listing} type='submit' className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>{`${listing ? "Updating..." : "Update Listing"}`}</button>
           
            </div>
             
@@ -214,4 +226,4 @@ function CreateListing() {
   )
 }
 
-export default CreateListing
+export default UpdateListing

@@ -99,8 +99,9 @@ export const createListing = async(req,res)=>{
 }
 export const updateListing = async(req,res)=>{
     try{
-        const {name , address , description , regularPrice , discountedPrice , parking , type , offer , imageUrls , bedrooms , bathrooms , furnished , listingId} = req.body
-        const findListing = await Listing.findById(listingId)
+        const {name , address , description , regularPrice , discountedPrice , parking , type , offer , imageUrls , bedrooms , bathrooms , furnished , _id} = req.body
+        console.log(_id)
+        const findListing = await Listing.findById({_id : _id})
         if(!findListing){
             return res.status(404).json({
                 success : false,
@@ -146,7 +147,7 @@ export const updateListing = async(req,res)=>{
         await findListing.save()
         return res.status(200).json({
             success : true,
-            message : `listing ${listingId} updated Successfully !!`,
+            message : `listing ${_id} updated Successfully !!`,
             listing : findListing
         })
     }catch(err){
@@ -154,5 +155,144 @@ export const updateListing = async(req,res)=>{
             success : false,
             message : "Internal Server Error"
         })
+    }
+}
+export const userListing = async(req,res)=>{
+    try{
+        const userId = req.user._id
+        console.log("userId" , userId)
+        const findAllListings = await Listing.find({userRef : userId})
+        if(!findAllListings){
+            return res.status(404).json({
+                success : false,
+                message : "No listing found for the user"
+            })
+        }
+        return res.status(200).json({
+            success : true,
+            message : "Listing found",
+            listing : findAllListings
+        })
+    }catch(err){
+        return res.status(500).json({
+            success : false,
+            message : "Internal server error"
+        })
+    }
+}
+export const findListing = async(req,res)=>{
+    try{    
+        const {listingId} = req.body
+        console.log(listingId)
+        const listing = await Listing.findById(listingId) 
+        if(!listing){
+            return res.status(404).json({
+                success : false,
+                message : "Listing not found"
+            })
+        }
+        return res.status(200).json({
+            success : true,
+            message : "Listing found",
+            listing : listing
+        })
+    }catch(err){
+        return res.status(500).json({
+            success : false,
+            message : "Internal Server Error"
+        })
+    }
+}
+export const deleteListing = async(req,res)=>{
+    try{
+        const {listingId} = req.body
+        console.log(listingId)
+        const dltListing = await Listing.findByIdAndDelete({_id : listingId})
+        if(!dltListing){
+            return res.status(401).json({
+                success : false,
+                message : "Not able to delete Listing"
+            })
+        }
+        return res.status(200).json({
+            success : true,
+            message : "Deleted Successfully"
+        })
+    }catch(err){
+       return res.status(500).json({
+            success : false,
+            message : "internal Server Error"
+        })
+    }
+}
+export const getListing = async(req,res)=>{
+    try{
+        const limit = parseInt(req.query.limit) || 9
+        const startIndex = parseInt(req.query.startIndex) || 0
+        let offer = req.query.offer
+        
+        if(offer === undefined || offer === 'false'){
+            offer = {$in : [false,true]}
+        }
+        let furnished = req.query.furnished
+        
+        if(furnished === undefined || furnished === 'false'){
+            furnished = { $in : [false,true]}
+        }
+        let parking = req.query.parking
+        
+        if(parking === undefined || parking === 'false'){
+            parking = { $in : [ false , true ]}
+        }
+        
+        let type = req.query.type
+        if(type === undefined || type === 'all'){
+            type = { $in : ['Sale' ,'Rent'  ]}
+        }
+
+        const searchTerm = req.query.searchTerm || ''
+        const sortOnTheBasis = req.query.sortOnTheBasis || 'createdAt'
+        let { order } = req.query || -1
+        if(order === 'desc'){
+            order = -1
+        }
+        if(order === 'asc'){
+            order = 1
+        }
+      
+
+        console.log("offer", req.query.offer)
+        console.log("furnished" ,req.query.furnished)
+        console.log("parking" , req.query.parking)
+        console.log("type " , req.query.type)
+        console.log("searchTerm" , req.query.searchTerm)
+        console.log("sort" ,req.query.sortOnTheBasis)
+        console.log("limit" , req.query.limit ,  "index" ,req.query.startIndex)
+        console.log("order" , req.query.order , "sortOnTheBasis" , req.query.sortOnTheBasis)
+
+        
+        const listings = await Listing.find({
+            name : {
+                $regex : searchTerm  , $options : 'i'
+            },
+            offer,
+            furnished,
+            parking,
+            type
+        }).sort({[sortOnTheBasis] : order , }).limit(limit).skip(startIndex)
+
+        if(!listings){
+            return res.status(404).json({
+                success: false,
+                message : "Listing not found"
+            })
+        }
+        return res.status(200).json({
+            success : true,
+            message : "Listings fetched",
+            listings : listings
+        })
+    }catch(err){
+        console.log(err)
     }
 }
